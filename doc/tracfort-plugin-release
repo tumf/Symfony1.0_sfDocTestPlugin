@@ -1,0 +1,26 @@
+#!/bin/sh
+# plugin
+verfile=`dirname $0`/../VERSION
+ver=`head -n 1 ${verfile}`
+
+plugin=sfDocTestPlugin
+dir=`mktemp -d`
+root=http://svn.tracfort.jp/svn
+project=dino-symfony
+
+
+#mkdir -p ${dir}
+#cd ${dir} || exit
+svn cp ${root}/${project}/plugins/${plugin}\
+    ${root}/${project}/tags/${plugin}-${ver}\
+    -m "tagged"
+
+#svn export ${root}/${project}/tags/${plugin}-${ver} ${plugin}
+#tar cvzf ${plugin}-${ver}.tgz ${plugin}
+#mkdir -p ~/released
+#cp -v ${plugin}-${ver}.tgz ~/released
+
+rm -f `dirname $0`/../*.tgz
+./symfony plugin:package --plugin-version=${ver} --plugin-stability=stable sfDocTestPlugin
+mv -f `dirname $0`/../*.tgz ~/released/
+
